@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Team Players</title>
+  <script src="https://unpkg.com/react/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone/babel.min.js"></script>
+  <style>
+    /* Styles here */
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script type="text/babel">
+    // TeamPlayer component
+    class TeamPlayer extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          teamPlayers: [],
+          averageScore: '',
+          minimumScore: '',
+          maximumScore: '',
+        };
+      }
+
+      handleInputChange = (event) => {
+        this.setState({ [event.target.name]: event.target.value });
+      }
+
+      handleAddTeamPlayer = () => {
+        const { averageScore, minimumScore, maximumScore } = this.state;
+        const teamPlayer = { averageScore, minimumScore, maximumScore };
+
+        this.setState(prevState => ({
+          teamPlayers: [...prevState.teamPlayers, teamPlayer],
+          averageScore: '',
+          minimumScore: '',
+          maximumScore: '',
+        }));
+      }
+
+      handleDeleteTeamPlayer = (index) => {
+        const { teamPlayers } = this.state;
+        const deletedTeamPlayer = teamPlayers[index];
+        const updatedTeamPlayers = teamPlayers.filter((_, i) => i !== index);
+
+        this.setState(prevState => ({
+          teamPlayers: updatedTeamPlayers,
+        }));
+      }
+
+      render() {
+        const { teamPlayers, averageScore, minimumScore, maximumScore } = this.state;
+
+        return (
+          <div className="container">
+            <h1>Team Players</h1>
+            <div>
+              <label>Average Score:</label>
+              <input type="number" name="averageScore" value={averageScore} onChange={this.handleInputChange} placeholder="Enter average score" />
+            </div>
+            <div>
+              <label>Minimum Score:</label>
+              <input type="number" name="minimumScore" value={minimumScore} onChange={this.handleInputChange} placeholder="Enter minimum score" />
+            </div>
+            <div>
+              <label>Maximum Score:</label>
+              <input type="number" name="maximumScore" value={maximumScore} onChange={this.handleInputChange} placeholder="Enter maximum score" />
+            </div>
+            <div>
+              <button onClick={this.handleAddTeamPlayer}>Add Team Player</button>
+            </div>
+            <ul>
+              {teamPlayers.map((teamPlayer, index) => (
+                <li key={index}>
+                  <span>Average Score: {teamPlayer.averageScore}, Minimum Score: {teamPlayer.minimumScore}, Maximum Score: {teamPlayer.maximumScore}</span>
+                  <button onClick={() => this.handleDeleteTeamPlayer(index)}>Delete</button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      }
+    }
+
+    // Render the TeamPlayer component
+    ReactDOM.render(<TeamPlayer />, document.getElementById('app'));
+  </script>
+</body>
+
+</html>
